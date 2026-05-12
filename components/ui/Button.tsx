@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, useColorScheme } from "react-native";
 
 type Variant = "primary" | "outline";
 
@@ -15,11 +15,16 @@ export default function Button({
   variant = "primary",
   disabled,
 }: Props) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   return (
     <TouchableOpacity
       style={[
         styles.button,
+        isDark && styles.buttonDark,
         variant === "outline" && styles.outline,
+        variant === "outline" && isDark && styles.outlineDark,
         disabled && styles.disabled,
       ]}
       onPress={onPress}
@@ -28,7 +33,8 @@ export default function Button({
       <Text
         style={[
           styles.text,
-          variant === "outline" && styles.outlineText,
+          variant === "outline" && !isDark && styles.outlineText,
+          isDark && variant === "primary" && styles.primaryDarkText,
         ]}
       >
         {title}
@@ -48,10 +54,18 @@ const styles = StyleSheet.create({
     height: 40,
     minWidth: 141,
   },
+  buttonDark: {
+    backgroundColor: "#3E5F63",
+  },
   outline: {
     backgroundColor: "transparent",
     borderWidth: 1.5,
     borderColor: "#82A8AC",
+  },
+  outlineDark: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "#3E5F63",
   },
   disabled: {
     opacity: 0.5,
@@ -64,5 +78,8 @@ const styles = StyleSheet.create({
   },
   outlineText: {
     color: "#82A8AC",
+  },
+  primaryDarkText: {
+    color: "#000",
   },
 });
