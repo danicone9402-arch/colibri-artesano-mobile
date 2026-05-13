@@ -1,4 +1,5 @@
 import { View, Text, Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { s, vs, ms } from "@/utils/scale";
 
 // static list — will be replaced with API data later
 const CATEGORIES = [
@@ -37,31 +38,31 @@ export default function CategoriesSection() {
 
 const styles = StyleSheet.create({
   section: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: vs(16),
+    paddingHorizontal: s(16),
   },
   title: {
-    fontSize: 15,
+    fontSize: ms(15),
     fontWeight: "700",
     color: "#000",
-    marginBottom: 12,
+    marginBottom: vs(12),
   },
   titleDark: {
     color: "#fff",
   },
   carousel: {
     // gap of 32 distributes the 3 images evenly across the screen width
-    gap: 32,
-    paddingBottom: 4,
+    gap: s(32),
+    paddingBottom: vs(4),
   },
   card: {
     alignItems: "center",
-    gap: 6,
+    gap: vs(6),
   },
   image: {
-    width: 98,
-    height: 108,
-    borderRadius: 15,
+    width: s(98),
+    height: vs(108),
+    borderRadius: ms(15),
     // rgba instead of hex so we can control opacity (28% black from Figma spec)
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0.28)",
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.28)",
   },
   label: {
-    fontSize: 11,
+    fontSize: ms(11),
     fontWeight: "600",
     color: "#000",
   },
