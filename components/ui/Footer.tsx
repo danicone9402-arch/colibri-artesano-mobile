@@ -6,17 +6,24 @@ import {
   useColorScheme,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+// useSafeAreaInsets gives the home indicator height so the footer doesn't overlap it
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Footer() {
+  // reads the phone's system light/dark setting
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
+  // insets.bottom = height of the home indicator
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, isDark ? styles.containerDark : styles.containerLight]}>
+    // paddingBottom uses insets.bottom so the content sits above the home indicator
+    <View style={[styles.container, isDark ? styles.containerDark : styles.containerLight, { paddingBottom: insets.bottom }]}>
       <Text style={[styles.title, isDark ? styles.titleDark : styles.titleLight]}>
         Cuenta
       </Text>
 
+      {/* 2-column grid — each item takes 50% of the row */}
       <View style={styles.grid}>
         {[
           { icon: "inventory-2" as const, label: "Mis pedidos" },
@@ -26,12 +33,13 @@ export default function Footer() {
           { icon: "person" as const, label: "Datos personales" },
           { icon: "logout" as const, label: "Cerrar sesión" },
         ].map((item, index) => (
+          // onPress is empty for now — wired up when screens are built
           <TouchableOpacity
             key={index}
             style={styles.item}
             onPress={() => {}}
           >
-            <MaterialIcons name={item.icon} size={20} color="#000" />
+            <MaterialIcons name={item.icon} size={20} color={isDark ? "#fff" : "#000"} />
             <Text style={[styles.label, isDark ? styles.labelDark : styles.labelLight]}>
               {item.label}
             </Text>
@@ -49,10 +57,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   containerLight: {
-    backgroundColor: "#D9D9D9", // light mode
+    backgroundColor: "#D9D9D9",
   },
   containerDark: {
-    backgroundColor: "#3F1D23", // dark mode
+    backgroundColor: "#3F1D23",
   },
 
   title: {
@@ -60,10 +68,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   titleLight: {
-    color: "#000", // light mode
+    color: "#000",
   },
   titleDark: {
-    color: "#fff", // dark mode
+    color: "#fff",
   },
 
   grid: {
@@ -71,7 +79,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   item: {
-    width: "50%",
+    width: "50%", // two items per row
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
@@ -82,9 +90,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   labelLight: {
-    color: "#000", // light mode
+    color: "#000",
   },
   labelDark: {
-    color: "#fff", // dark mode
+    color: "#fff",
   },
 });
