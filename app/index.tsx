@@ -1,8 +1,11 @@
+// temporary screen for testing UI components — not a final screen
 import { useState } from "react";
 import { View, StyleSheet, useColorScheme, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Footer from "@/components/ui/Footer";
+import Header from "@/components/ui/Header";
 
 export default function Index() {
   const colorScheme = useColorScheme();
@@ -15,8 +18,9 @@ export default function Index() {
   const [acerca, setAcerca] = useState("");
 
   return (
-    <View style={[styles.wrapper, isDark && styles.wrapperDark]}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView edges={["top"]} style={[styles.wrapper, isDark && styles.wrapperDark]}>
+      <Header />
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
         {/* Half width row */}
         <View style={styles.row}>
           <Input
@@ -63,7 +67,7 @@ export default function Index() {
       </ScrollView>
 
       <Footer />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   wrapperDark: {
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "#000",
   },
   container: {
     flexGrow: 1,
@@ -81,6 +85,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 24,
     gap: 12,
+  },
+  scroll: {
+    flex: 1,
   },
   row: {
     flexDirection: "row",
