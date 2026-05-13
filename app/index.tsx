@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { View, StyleSheet, useColorScheme } from "react-native";
+import { View, StyleSheet, useColorScheme, ScrollView } from "react-native";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Footer from "@/components/ui/Footer";
 
 export default function Index() {
   const colorScheme = useColorScheme();
@@ -14,64 +15,72 @@ export default function Index() {
   const [acerca, setAcerca] = useState("");
 
   return (
-    <View style={[styles.container, isDark && styles.containerDark]}>
-      {/* Half width row */}
-      <View style={styles.row}>
+    <View style={[styles.wrapper, isDark && styles.wrapperDark]}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Half width row */}
+        <View style={styles.row}>
+          <Input
+            style={styles.flex}
+            placeholder="Nombre"
+            value={nombre}
+            onChangeText={setNombre}
+          />
+          <Input
+            style={styles.flex}
+            placeholder="Apellidos"
+            value={apellidos}
+            onChangeText={setApellidos}
+          />
+        </View>
+
+        {/* Full width */}
         <Input
-          style={styles.flex}
-          placeholder="Nombre"
-          value={nombre}
-          onChangeText={setNombre}
+          placeholder="Número de teléfono"
+          value={telefono}
+          onChangeText={setTelefono}
+          keyboardType="phone-pad"
         />
         <Input
-          style={styles.flex}
-          placeholder="Apellidos"
-          value={apellidos}
-          onChangeText={setApellidos}
+          placeholder="Correo electrónico"
+          value={correo}
+          onChangeText={setCorreo}
+          keyboardType="email-address"
         />
-      </View>
 
-      {/* Full width */}
-      <Input
-        placeholder="Número de teléfono"
-        value={telefono}
-        onChangeText={setTelefono}
-        keyboardType="phone-pad"
-      />
-      <Input
-        placeholder="Correo electrónico"
-        value={correo}
-        onChangeText={setCorreo}
-        keyboardType="email-address"
-      />
+        {/* Multiline */}
+        <Input
+          placeholder="Acerca de mí"
+          value={acerca}
+          onChangeText={setAcerca}
+          multiline
+        />
 
-      {/* Multiline */}
-      <Input
-        placeholder="Acerca de mí"
-        value={acerca}
-        onChangeText={setAcerca}
-        multiline
-      />
+        {/* Buttons */}
+        <View style={styles.rowSpaced}>
+          <Button title="Descartar" onPress={() => {}} variant="outline" />
+          <Button title="Confirmar" onPress={() => {}} />
+        </View>
+      </ScrollView>
 
-      {/* Buttons */}
-      <View style={styles.rowSpaced}>
-        <Button title="Descartar" onPress={() => {}} variant="outline" />
-        <Button title="Confirmar" onPress={() => {}} />
-      </View>
+      <Footer />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 24,
-    gap: 12,
     backgroundColor: "#fff",
   },
-  containerDark: {
+  wrapperDark: {
     backgroundColor: "#1a1a1a",
+  },
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    gap: 12,
   },
   row: {
     flexDirection: "row",
