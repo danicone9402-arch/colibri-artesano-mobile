@@ -11,7 +11,7 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type Props = {
-  onMenuPress?: () => void; // optional until hamburger menu is built
+  onMenuPress?: () => void;
 };
 
 export default function Header({ onMenuPress }: Props) {
@@ -23,7 +23,7 @@ export default function Header({ onMenuPress }: Props) {
     // no top padding here — the SafeAreaView edges={["top"]} wrapping this component handles the status bar offset
     <View style={[styles.container, isDark ? styles.containerDark : styles.containerLight]}>
 
-      {/* placeholder for drawer navigation — not wired up yet */}
+      {/* opens HamburgerMenu in HomeScreen */}
       <TouchableOpacity onPress={onMenuPress}>
         <MaterialIcons
           name="menu"
