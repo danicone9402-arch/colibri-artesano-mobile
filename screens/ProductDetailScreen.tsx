@@ -31,6 +31,7 @@ export default function ProductDetailScreen() {
 
   useEffect(() => {
     if (!id) return;
+
     getProductById(Number(id))
       .then(setProduct)
       .catch(() => setError("No se pudo cargar el producto."))
@@ -53,11 +54,12 @@ export default function ProductDetailScreen() {
       <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={["top"]}>
         <NavBar isDark={isDark} onBack={() => router.back()} />
         <ThemedView style={styles.center}>
-          <ThemedText type="default" style={styles.errorText}>
+          <ThemedText style={styles.errorText}>
             {error ?? "Producto no encontrado."}
           </ThemedText>
+
           <TouchableOpacity style={styles.retryBtn} onPress={() => router.back()}>
-            <ThemedText type="defaultSemiBold" style={styles.retryText}>Volver</ThemedText>
+            <ThemedText style={styles.retryText}>Volver</ThemedText>
           </TouchableOpacity>
         </ThemedView>
       </SafeAreaView>
@@ -69,79 +71,82 @@ export default function ProductDetailScreen() {
       <NavBar isDark={isDark} onBack={() => router.back()} />
 
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-        {/* Imagen principal — cuando el backend soporte múltiples imágenes
-            se puede reemplazar por una FlatList horizontal con dots */}
-        <Image
-          source={getProductImage(product.image_url)}
-          style={styles.mainImage}
-          resizeMode="cover"
-        />
-
-        {/* Info */}
-        <ThemedView style={styles.content}>
+        <View style={[styles.headerBg, { backgroundColor: colors.headerBg }]}>
           <ThemedText type="title" style={styles.name}>
             {product.name}
           </ThemedText>
 
+          <Image
+            source={getProductImage(product.image_url)}
+            style={styles.mainImage}
+            resizeMode="cover"
+          />
+        </View>
+
+        <View style={[styles.infoCard, { backgroundColor: colors.contentBg }]}>
           {product.price != null && (
             <ThemedText type="defaultSemiBold" style={styles.price}>
               ₡{product.price.toLocaleString("es-CR")}
             </ThemedText>
           )}
 
-          <ThemedView style={styles.section}>
+          <View style={styles.section}>
             <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
               Descripción:
             </ThemedText>
-            <ThemedText type="default" style={styles.body}>
+
+            <ThemedText style={styles.body}>
               {product.description}
             </ThemedText>
-          </ThemedView>
-
-        </ThemedView>
+          </View>
+        </View>
       </ScrollView>
 
-      {/* Botón sticky */}
+      {/* BOTÓN */}
       <ThemedView
-        style={[styles.bottomBar, isDark ? styles.bottomBarDark : styles.bottomBarLight]}
+        style={[
+          styles.bottomBar,
+          isDark ? styles.bottomBarDark : styles.bottomBarLight,
+        ]}
       >
-        <Button
-          title="Agregar al carrito"
-          onPress={() => {
-            // TODO: conectar con carrito
-          }}
-        />
+        <Button title="Agregar al carrito" onPress={() => {}} />
       </ThemedView>
     </SafeAreaView>
   );
 }
 
-// ─── NavBar ───────────────────────────────────────────────────────────────────
+
 function NavBar({ isDark, onBack }: { isDark: boolean; onBack: () => void }) {
   const colors = isDark ? Colors.dark : Colors.light;
+
   return (
     <View
       style={[
         styles.navBar,
-        { backgroundColor: colors.background, borderBottomColor: isDark ? "#222" : "#E5E5E5" },
+        {
+          backgroundColor: colors.background,
+          borderBottomColor: isDark ? "#222" : "#E5E5E5",
+        },
       ]}
     >
       <TouchableOpacity onPress={onBack} hitSlop={8}>
         <MaterialIcons name="chevron-left" size={ms(28)} color={colors.text} />
       </TouchableOpacity>
+
       <View style={styles.breadcrumb}>
-        <ThemedText type="default" style={styles.breadcrumbItem}>Productos</ThemedText>
-        <ThemedText type="default" style={styles.breadcrumbSep}>{" | "}</ThemedText>
-        <ThemedText type="defaultSemiBold" style={styles.breadcrumbActive}>
+        <ThemedText style={styles.breadcrumbItem}>Productos</ThemedText>
+        <ThemedText style={styles.breadcrumbSep}> | </ThemedText>
+        <ThemedText style={styles.breadcrumbActive}>
           Detalles de producto
         </ThemedText>
       </View>
+
       <MaterialIcons name="more-horiz" size={ms(24)} color={colors.icon} />
     </View>
   );
 }
 
-// ─── Estilos ──────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   safe: { flex: 1 },
 
@@ -153,53 +158,119 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     gap: s(8),
   },
-  breadcrumb: { flex: 1, flexDirection: "row", alignItems: "center" },
-  breadcrumbItem:   { fontSize: ms(13), opacity: 0.6 },
-  breadcrumbSep:    { fontSize: ms(13), opacity: 0.4, marginHorizontal: s(2) },
+
+  breadcrumb: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  breadcrumbItem: { fontSize: ms(13), opacity: 0.6 },
+  breadcrumbSep: { fontSize: ms(13), opacity: 0.4 },
   breadcrumbActive: { fontSize: ms(13) },
 
-  mainImage: {
+  headerBg: {
     width: "100%",
-    height: vs(260),
+    paddingTop: vs(20),
+    paddingBottom: vs(30),
+    alignItems: "center",
   },
 
-  content: {
-    padding: s(16),
+  name: {
+    color: "#fff",
+    fontSize: ms(28),
+    fontWeight: "bold",
+    marginBottom: vs(12),
+    textAlign: "center",
+  },
+
+  mainImage: {
+    width: "90%",
+    height: vs(240),
+    borderRadius: ms(16),
+  },
+
+  infoCard: {
+    marginTop: vs(50),
+    width: "100%",
+
+    minHeight: "auto",
+
+    padding: s(18),
+
     gap: vs(12),
-    paddingBottom: vs(110),
-    backgroundColor: "transparent",
-  },
-  name:         { lineHeight: ms(38) },
-  price:        { fontSize: ms(18), color: "#3E5F63" },
-  section:      { gap: vs(4), backgroundColor: "transparent" },
-  sectionTitle: { fontSize: ms(16) },
-  body:         { opacity: 0.75, lineHeight: ms(22) },
 
+    // sombra (iOS)
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -4 },
+
+    // Android
+    elevation: 6,
+  },
+
+  price: {
+    fontSize: ms(18),
+    color: "#3E5F63",
+  },
+
+  section: {
+    gap: vs(4),
+  },
+
+  sectionTitle: {
+    fontSize: ms(16),
+  },
+
+  body: {
+    opacity: 0.85,
+    lineHeight: ms(22),
+  },
+
+  /* BUTTON */
   bottomBar: {
     position: "absolute",
-    bottom: 0, left: 0, right: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     padding: s(16),
     paddingBottom: vs(28),
     alignItems: "center",
     borderTopWidth: 1,
   },
-  bottomBarLight: { borderTopColor: "#E5E5E5" },
-  bottomBarDark:  { borderTopColor: "#222" },
 
+  bottomBarLight: {
+    borderTopColor: "#E5E5E5",
+  },
+
+  bottomBarDark: {
+    borderTopColor: "#222",
+  },
+
+  /* STATES */
   center: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     gap: vs(12),
     padding: s(24),
-    backgroundColor: "transparent",
   },
-  errorText: { textAlign: "center", opacity: 0.8 },
+
+  errorText: {
+    textAlign: "center",
+    opacity: 0.8,
+  },
+
   retryBtn: {
     backgroundColor: "#82A8AC",
     paddingHorizontal: s(24),
     paddingVertical: vs(10),
     borderRadius: ms(20),
   },
-  retryText: { color: "#fff", fontSize: ms(14) },
+
+  retryText: {
+    color: "#fff",
+    fontSize: ms(14),
+  },
 });
